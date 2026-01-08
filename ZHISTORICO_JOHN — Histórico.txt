@@ -1,0 +1,20 @@
+( ZHISTORICO_JOHN — Histórico )
+
+REPORT zhistorico_john.
+
+DATA: it_hist TYPE TABLE OF zlocacao_fj,
+      wa_hist TYPE zlocacao_fj.
+
+SELECT *
+FROM zlocacao_fj
+INTO TABLE it_hist
+WHERE status = 'E'.
+
+LOOP AT it_hist INTO wa_hist.
+  WRITE: / wa_hist-locacao_id,
+           wa_hist-cliente_id,
+           wa_hist-veiculo_id,
+           wa_hist-dt_retirada,
+           wa_hist-dt_prev_dev,
+           wa_hist-dt_dev_real.
+ENDLOOP.

@@ -1,0 +1,24 @@
+( ZCLI_LIST_FJ — Filtragem de Clientes )
+
+REPORT zcli_list_fj.
+
+PARAMETERS:
+  p_nome TYPE zclientes_fj-nome,
+  p_cpf  TYPE zclientes_fj-cpf.
+
+DATA: it_cli TYPE TABLE OF zclientes_fj,
+      wa_cli TYPE zclientes_fj.
+
+SELECT *
+FROM zclientes_fj
+INTO TABLE it_cli
+WHERE ( nome LIKE p_nome OR p_nome IS INITIAL )
+  AND ( cpf  = p_cpf  OR p_cpf  IS INITIAL ).
+
+LOOP AT it_cli INTO wa_cli.
+  WRITE: / wa_cli-cliente_id,
+           wa_cli-nome,
+           wa_cli-cpf,
+           wa_cli-telefone,
+           wa_cli-email.
+ENDLOOP.

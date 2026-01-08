@@ -1,0 +1,25 @@
+( ZVEIC_LIST_FJ — Filtragem de Veículos )
+
+REPORT zveic_list_fj.
+
+PARAMETERS:
+  p_tipo   TYPE zveiculos_fj-tipo,
+  p_status TYPE zveiculos_fj-status.
+
+DATA: it_veic TYPE TABLE OF zveiculos_fj,
+      wa_veic TYPE zveiculos_fj.
+
+SELECT *
+FROM zveiculos_fj
+INTO TABLE it_veic
+WHERE ( tipo   = p_tipo   OR p_tipo   IS INITIAL )
+  AND ( status = p_status OR p_status IS INITIAL ).
+
+LOOP AT it_veic INTO wa_veic.
+  WRITE: / wa_veic-veiculo_id,
+           wa_veic-marca,
+           wa_veic-modelo,
+           wa_veic-placa,
+           wa_veic-tipo,
+           wa_veic-status.
+ENDLOOP.

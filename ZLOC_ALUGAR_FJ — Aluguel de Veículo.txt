@@ -1,0 +1,42 @@
+( ZLOC_ALUGAR_FJ — Aluguel de Veículo )
+
+REPORT zloc_alugar_fj.
+
+PARAMETERS:
+  p_cliente TYPE zclientes_fj-cliente_id OBLIGATORY,
+  p_veiculo TYPE zveiculos_fj-veiculo_id OBLIGATORY,
+  p_retir   TYPE dats OBLIGATORY,
+  p_prev    TYPE dats OBLIGATORY.
+
+DATA: ls_loc TYPE zlocacao_fj,
+      lv_id  TYPE zlocacao_fj-locacao_id.
+
+SELECT SINGLE status
+FROM zveiculos_fj
+WHERE veiculo_id = p_veiculo
+  AND status = 'D'.
+
+IF sy-subrc <> 0.
+  MESSAGE 'Veículo indisponível' TYPE 'E'.
+ENDIF.
+
+SELECT MAX( locacao_id )
+FROM zlocacao_fj
+INTO lv_id.
+
+lv_id = lv_id + 1.
+
+ls_loc-locacao_id  = lv_id.
+ls_loc-cliente_id  = p_cliente.
+ls_loc-veiculo_id  = p_veiculo.
+ls_loc-dt_retirada = p_retir.
+ls_loc-dt_prev_dev = p_prev.
+ls_loc-status      = 'A'.
+
+INSERT zlocacao_fj FROM ls_loc.
+
+UPDATE zveiculos_fj
+SET status = 'A'
+WHERE veiculo_id = p_veiculo.
+
+MESSAGE 'Locação registrada com sucesso' TYPE 'S'.

@@ -1,0 +1,36 @@
+( ZCLI_CAD_FJ — Cadastro de Clientes )
+
+REPORT zcli_cad_fj.
+
+PARAMETERS:
+  p_nome  TYPE zclientes_fj-nome OBLIGATORY,
+  p_cpf   TYPE zclientes_fj-cpf OBLIGATORY,
+  p_tel   TYPE zclientes_fj-telefone,
+  p_email TYPE zclientes_fj-email.
+
+DATA: ls_cli TYPE zclientes_fj,
+      lv_id  TYPE zclientes_fj-cliente_id.
+
+SELECT SINGLE cliente_id
+FROM zclientes_fj
+WHERE cpf = p_cpf.
+
+IF sy-subrc = 0.
+  MESSAGE 'CPF já cadastrado' TYPE 'E'.
+ENDIF.
+
+SELECT MAX( cliente_id )
+FROM zclientes_fj
+INTO lv_id.
+
+lv_id = lv_id + 1.
+
+ls_cli-cliente_id = lv_id.
+ls_cli-nome       = p_nome.
+ls_cli-cpf        = p_cpf.
+ls_cli-telefone   = p_tel.
+ls_cli-email      = p_email.
+
+INSERT zclientes_fj FROM ls_cli.
+
+MESSAGE 'Cliente cadastrado com sucesso' TYPE 'S'.

@@ -1,0 +1,39 @@
+( ZVEIC_CAD_FJ — Cadastro de Veículos )
+
+REPORT zveic_cad_fj.
+
+PARAMETERS:
+  p_marca  TYPE zveiculos_fj-marca OBLIGATORY,
+  p_modelo TYPE zveiculos_fj-modelo OBLIGATORY,
+  p_ano    TYPE zveiculos_fj-ano OBLIGATORY,
+  p_placa  TYPE zveiculos_fj-placa OBLIGATORY,
+  p_tipo   TYPE zveiculos_fj-tipo OBLIGATORY.
+
+DATA: ls_veic TYPE zveiculos_fj,
+      lv_id   TYPE zveiculos_fj-veiculo_id.
+
+SELECT SINGLE veiculo_id
+FROM zveiculos_fj
+WHERE placa = p_placa.
+
+IF sy-subrc = 0.
+  MESSAGE 'Placa já cadastrada' TYPE 'E'.
+ENDIF.
+
+SELECT MAX( veiculo_id )
+FROM zveiculos_fj
+INTO lv_id.
+
+lv_id = lv_id + 1.
+
+ls_veic-veiculo_id = lv_id.
+ls_veic-marca      = p_marca.
+ls_veic-modelo     = p_modelo.
+ls_veic-ano        = p_ano.
+ls_veic-placa      = p_placa.
+ls_veic-tipo       = p_tipo.
+ls_veic-status     = 'D'.
+
+INSERT zveiculos_fj FROM ls_veic.
+
+MESSAGE 'Veículo cadastrado com sucesso' TYPE 'S'.

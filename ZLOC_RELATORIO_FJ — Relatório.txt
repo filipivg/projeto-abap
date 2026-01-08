@@ -1,0 +1,12 @@
+( ZLOC_RELATORIO_FJ — Relatório )
+
+REPORT zloc_relatorio_fj.
+
+DATA: lv_disp TYPE i,
+      lv_alug TYPE i.
+
+SELECT COUNT(*) FROM zveiculos_fj INTO lv_disp WHERE status = 'D'.
+SELECT COUNT(*) FROM zveiculos_fj INTO lv_alug WHERE status = 'A'.
+
+WRITE: / 'Veículos disponíveis:', lv_disp,
+       / 'Veículos alugados:', lv_alug.

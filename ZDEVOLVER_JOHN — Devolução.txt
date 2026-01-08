@@ -1,0 +1,19 @@
+( ZDEVOLVER_JOHN — Devolução )
+
+REPORT zdevolver_john.
+
+PARAMETERS:
+  p_veiculo TYPE zveiculos_fj-veiculo_id OBLIGATORY,
+  p_data    TYPE dats OBLIGATORY.
+
+UPDATE zlocacao_fj
+SET dt_dev_real = p_data,
+    status      = 'E'
+WHERE veiculo_id = p_veiculo
+  AND status = 'A'.
+
+UPDATE zveiculos_fj
+SET status = 'D'
+WHERE veiculo_id = p_veiculo.
+
+MESSAGE 'Devolução realizada com sucesso' TYPE 'S'.

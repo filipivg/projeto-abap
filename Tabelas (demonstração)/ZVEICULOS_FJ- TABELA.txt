@@ -1,0 +1,9 @@
+( ZVEICULOS_FJ- TABELA )
+
+VEICULO_ID   NUMC(4)  PK
+MARCA        CHAR(20)
+MODELO       CHAR(20)
+ANO          NUMC(4)
+PLACA        CHAR(7)  UNIQUE
+TIPO         CHAR(10)
+STATUS       CHAR(1)  "D / A"
